@@ -2,15 +2,14 @@ package com.golfweb.cruddemo.rest;
 
 import com.golfweb.cruddemo.dao.UserDAO;
 import com.golfweb.cruddemo.entity.User;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/userapi")
 public class UserRestController {
 
     private UserDAO userDAO;
@@ -20,8 +19,48 @@ public class UserRestController {
         this.userDAO = userDAO;
     }
 
-    @GetMapping("/employees")
-    public List<User> findAll() {
+    @GetMapping("/users")
+    public List<User> findAllUsers() {
         return userDAO.findAll();
+    }
+
+    @GetMapping("/users/{userId}")
+    public User getUser(@PathVariable int userId) {
+        User user;
+        try {
+            user = userDAO.find(userId);
+        } catch (NotFoundException e) {
+            throw new RuntimeException("Could not find user with user id " + userId);
+        }
+
+        return user;
+    }
+
+    @PostMapping("/users")
+    public User addUser(@RequestBody User user) {
+        // Users id set to 0 will always save as a new user instead of updating in case of error
+        user.setUserId(0);
+        userDAO.saveOrUpdate(user);
+        return user;
+    }
+
+    @PutMapping("/users")
+    public User updateUser(@RequestBody User user) {
+        // If user doesn't exist, a new user will be created
+        userDAO.saveOrUpdate(user);
+        return user;
+    }
+
+    @DeleteMapping("/users/{userId}")
+    public User deleteUser(@PathVariable int userId) {
+        User user;
+        try {
+            user = userDAO.find(userId);
+        } catch (NotFoundException e) {
+            throw new RuntimeException("User not found with user Id " + userId);
+        }
+
+        userDAO.delete(userId);
+        return user;
     }
 }

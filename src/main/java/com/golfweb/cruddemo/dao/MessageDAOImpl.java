@@ -1,55 +1,55 @@
 package com.golfweb.cruddemo.dao;
 
-import com.golfweb.cruddemo.entity.User;
+import com.golfweb.cruddemo.entity.Message;
 import javassist.NotFoundException;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
-public class UserDAOImpl implements UserDAO {
+public class MessageDAOImpl implements MessageDAO {
 
     private EntityManager entityManager;
 
     @Autowired
-    public UserDAOImpl(EntityManager entityManager) {
+    public MessageDAOImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
     @Override
     @Transactional
-    public List<User> findAll() {
+    public List<Message> findAll() {
         Session session = entityManager.unwrap(Session.class);
 
-        Query<User> query = session.createQuery("from User", User.class);
+        Query query = session.createQuery("from Message", Message.class);
 
         return query.getResultList();
     }
 
     @Override
     @Transactional
-    public User find(int id) throws NotFoundException {
+    public Message find(int id) throws NotFoundException {
         Session session = entityManager.unwrap(Session.class);
 
-        User user = session.get(User.class, id);
-        if(user == null) {
+        Message message = session.get(Message.class, id);
+        if(message == null) {
             throw new NotFoundException("Id couldn't be found");
         }
 
-        return user;
+        return message;
     }
 
     @Override
     @Transactional
-    public void saveOrUpdate(User user) {
+    public void saveOrUpdate(Message message) {
         Session session = entityManager.unwrap(Session.class);
 
-        session.saveOrUpdate(user);
+        session.saveOrUpdate(message);
     }
 
     @Override
@@ -57,8 +57,8 @@ public class UserDAOImpl implements UserDAO {
     public void delete(int id) {
         Session session = entityManager.unwrap(Session.class);
 
-        Query query = session.createQuery("delete from User where id=:userId");
-        query.setParameter("userId", id);
+        Query query = session.createQuery("delete from Message where id=:messageId");
+        query.setParameter("messageId", id);
 
         query.executeUpdate();
     }
