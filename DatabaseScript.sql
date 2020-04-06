@@ -21,8 +21,8 @@ CREATE TABLE message(
 	content TEXT DEFAULT NULL,
 	timestmp DATE NOT NULL,
 	PRIMARY KEY(message_id),
-	FOREIGN KEY(sender) REFERENCES User(user_id),
-	FOREIGN KEY(receiver) REFERENCES User(user_id)
+	FOREIGN KEY(sender) REFERENCES user(user_id),
+	FOREIGN KEY(receiver) REFERENCES user(user_id)
 );
 
 # Populate tables
