@@ -19,11 +19,13 @@ public class UserRestController {
         this.userDAO = userDAO;
     }
 
+    @CrossOrigin
     @GetMapping("/users")
     public List<User> findAllUsers() {
         return userDAO.findAll();
     }
 
+    @CrossOrigin
     @GetMapping("/users/{userId}")
     public User getUser(@PathVariable int userId) {
         User user;
@@ -36,6 +38,7 @@ public class UserRestController {
         return user;
     }
 
+    @CrossOrigin
     @PostMapping("/users")
     public User addUser(@RequestBody User user) {
         // Users id set to 0 will always save as a new user instead of updating in case of error
@@ -44,6 +47,7 @@ public class UserRestController {
         return user;
     }
 
+    @CrossOrigin
     @PutMapping("/users")
     public User updateUser(@RequestBody User user) {
         // If user doesn't exist, a new user will be created
@@ -51,6 +55,7 @@ public class UserRestController {
         return user;
     }
 
+    @CrossOrigin
     @DeleteMapping("/users/{userId}")
     public User deleteUser(@PathVariable int userId) {
         User user;

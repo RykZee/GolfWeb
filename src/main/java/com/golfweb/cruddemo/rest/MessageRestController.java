@@ -20,11 +20,13 @@ public class MessageRestController {
         this.messageDAO = messageDAO;
     }
 
+    @CrossOrigin
     @GetMapping("/messages")
     public List<Message> findAllMessages() {
         return messageDAO.findAll();
     }
 
+    @CrossOrigin
     @GetMapping("/messages/{messageId}")
     public Message getMessage(@PathVariable int messageId) {
         Message message;
@@ -36,6 +38,13 @@ public class MessageRestController {
         return message;
     }
 
+    @CrossOrigin
+    @GetMapping("messages/receiver/{receiverId}")
+    public List<Message> getMessages(@PathVariable int receiverId) {
+        return messageDAO.findReceiver(receiverId);
+    }
+
+    @CrossOrigin
     @PostMapping("/messages")
     public Message sendMessage(@RequestBody Message message) {
         // Message id set to 0 will always save as a new user instead of updating in case of error
@@ -45,6 +54,7 @@ public class MessageRestController {
         return message;
     }
 
+    @CrossOrigin
     @PutMapping("/messages")
     public Message editMessage(@RequestBody Message message) {
         // If message can't be found a new message will be created
@@ -53,6 +63,7 @@ public class MessageRestController {
         return message;
     }
 
+    @CrossOrigin
     @DeleteMapping("/messages/{messageId}")
     public Message deleteMessage(@PathVariable int messageId) {
         Message message;

@@ -1,6 +1,7 @@
 package com.golfweb.cruddemo.dao;
 
 import com.golfweb.cruddemo.entity.Message;
+import com.golfweb.cruddemo.entity.User;
 import javassist.NotFoundException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,17 @@ public class MessageDAOImpl implements MessageDAO {
         }
 
         return message;
+    }
+
+    @Override
+    @Transactional
+    public List<Message> findReceiver(int receiverId) {
+        Session session = entityManager.unwrap(Session.class);
+
+        Query query = session.createQuery("SELECT m from Message m WHERE m.receiver.id = :recId");
+        query.setParameter("recId", receiverId);
+
+        return query.getResultList();
     }
 
     @Override
